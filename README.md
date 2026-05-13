@@ -7,6 +7,6 @@ agent = create_agent(
 )
 
 result = agent.invoke(
-    {"messages": [{"role": "user", "content": input("What's the weather in San Francisco?")}]}
+    {"messages": [{"role": "user", "content": input("Enter your prompt:")}]}
 )
 print(result["messages"][-1].content_blocks)
