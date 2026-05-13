@@ -1,11 +1,10 @@
 from langchain.agents import create_agent
+from google import genai
 
-agent = create_agent(
-    model="google_genai:gemini-2.5-flash-lite",
-    system_prompt="You are a helpful assistant",
-)
+client = genai.Client(api_key="AIzaSyBQub2quBscuXJ1CIjEyu88nZ_cFhpze7A")
 
-result = agent.invoke(
-    {"messages": [{"role": "user", "content": input("Enter your prompt:")}]}
+response = client.models.generate_content(
+    model="gemini-3-flash-preview",
+    contents=input("Enter your prompt:  ")
 )
-print(result["messages"][-1].content_blocks)
+print(response.text)
