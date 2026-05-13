@@ -1,10 +1,24 @@
+# in the powershell, enter your API Key in the environment
+import os
 from langchain.agents import create_agent
-from google import genai
 
-client = genai.Client(api_key="your_api_key")
+api_key = os.getenv("GOOGLE_API_KEY")
+if not api_key:
+    raise EnvironmentError("GOOGLE_API_KEY is not set in the environment.")
 
-response = client.models.generate_content(
-    model="gemini-3-flash-preview",
-    contents=input("Enter your prompt:  ")
+agent = create_agent(
+    model="google_genai:gemini-2.5-flash-lite",
+    system_prompt="You are a helpful assistant",
 )
-print(response.text)
+
+prompt = input("Enter your prompt: ")
+
+try:
+    result = agent.invoke(
+        {"messages": [{"role": "user", "content": prompt}]}
+    )
+    message = result["messages"][-1]
+    output = getattr(message, "content_blocks", None) or getattr(message, "content", None) or message
+    print(output)
+except Exception as exc:
+    print("Error invoking the agent:", exc)
